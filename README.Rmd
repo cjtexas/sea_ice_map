@@ -41,7 +41,7 @@ geom <- vapour::vapour_read_geometry(aadcgeoserver, skip_n = info$count  - 24 * 
                                   sql = "SELECT date_time_utc FROM \"underway:underway\"")
 track <- wk::wk_coords(wk::wkb(geom))[, c("x", "y")]
 
-track <- terra::project(track, to = terra::crs(r), from = "OGC:CRS84")
+track <- terra::project(as.matrix(track), to = terra::crs(r), from = "OGC:CRS84")
 lines(track, col = "hotpink")
 pt <- tail(track[!is.na(track[,1]) & !is.na(track[,2]), ], 1L)
 points(pt, pch = "+", col = "hotpink")
