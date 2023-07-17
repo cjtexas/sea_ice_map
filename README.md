@@ -11,23 +11,39 @@ The goal of seaice.map is to … display this image.
 
 ``` r
 library(terra)
-<<<<<<< HEAD
 #> terra 1.7.41
 r <- rast("data-raw/seaice.png")
-plot(r, axes = F)
+plot(r, axes = F, maxcell = prod(dim(r)[2:1]))
+
 points(terra::project(do.call(cbind, maps::map(plot = F)[1:2]), to = terra::crs(r), from = "OGC:CRS84"), pch = ".", col = "#777777")
 title(readLines("data-raw/latestdate.txt"))
-=======
-#> terra 1.7.39
-plot(rast("data-raw/seaice.png"), axes = F)
->>>>>>> 8a368f4cafc75cfd61a4164afb612d1a290ed00f
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
 
+``` r
+
+# aadcgeoserver <- "WFS:https://data.aad.gov.au/geoserver/ows?service=wfs&version=2.0.0&request=GetCapabilities"
+# info <- vapour::vapour_layer_info(aadcgeoserver, "underway:underway")
+# 
+# #dat <- vapour::vapour_read_fields(aadcgeoserver, skip_n = info$count  - 24 * 60 * 5, 
+# #                                  sql = "SELECT date_time_utc FROM \"underway:underway\"")
+# geom <- vapour::vapour_read_geometry(aadcgeoserver, skip_n = info$count  - 24 * 60 * 5, 
+#                                   sql = "SELECT date_time_utc FROM \"underway:underway\"")
+# track <- wk::wk_coords(wk::wkb(geom))[, c("x", "y")]
+# 
+# track <- terra::project(track, to = terra::crs(r), from = "OGC:CRS84")
+# lines(track, col = "hotpink")
+# pt <- tail(track[!is.na(track[,1]) & !is.na(track[,2]), ], 1L)
+# points(pt, pch = "+", col = "hotpink")
+```
+
 This is 25km sea ice concentration from NSIDC, reprojected from images
 published by NOAA at <https://noaadata.apps.nsidc.org/NOAA/G02135/> (the
 projection is Transverse Mercator with central longitude 147).
+
+The point (and track if available) is the recent position of the Nuyina
+vessel.
 
 Files in ‘data-raw/’ contain the actual metadata and scripts. This runs
 as a daily task on github actions.
