@@ -28,6 +28,5 @@ im <- gdal_raster_dsn(file.path("/vsicurl", c(north, south)),
                       target_res = 25000, target_crs = "+proj=tmerc +lon_0=147", target_ext = tm_ex,
                       out_dsn = "data-raw/seaice.png")
 
-plot(rast(im[[1]]))
 
 ##system(sprintf("gdal_translate data-raw/seaice.tif data-raw/seaice.png -of PNG -expand RGB"))
