@@ -11,11 +11,16 @@ The goal of seaice.map is to … display this image.
 
 ``` r
 library(terra)
+<<<<<<< HEAD
 #> terra 1.7.41
 r <- rast("data-raw/seaice.png")
 plot(r, axes = F)
 points(terra::project(do.call(cbind, maps::map(plot = F)[1:2]), to = terra::crs(r), from = "OGC:CRS84"), pch = ".", col = "#777777")
 title(readLines("data-raw/latestdate.txt"))
+=======
+#> terra 1.7.39
+plot(rast("data-raw/seaice.png"), axes = F)
+>>>>>>> 8a368f4cafc75cfd61a4164afb612d1a290ed00f
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
