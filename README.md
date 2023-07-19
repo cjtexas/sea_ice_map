@@ -11,32 +11,32 @@ The goal of seaice.map is to … display this image.
 
 ``` r
 library(terra)
-#> terra 1.7.39
+#> terra 1.7.41
 r <- rast("data-raw/seaice.png")
 plot(r, axes = F, maxcell = prod(dim(r)[2:1]))
 
 points(terra::project(do.call(cbind, maps::map(plot = F)[1:2]), to = terra::crs(r), from = "OGC:CRS84"), pch = ".", col = "#777777")
 title(readLines("data-raw/latestdate.txt"))
+
+aadcgeoserver <- "WFS:https://data.aad.gov.au/geoserver/ows?service=wfs&version=2.0.0&request=GetCapabilities"
+layer <- "underway:nuyina_underway"
+info <- vapour::vapour_layer_info(aadcgeoserver, "underway:nuyina_underway")
+
+n <- 12 * 24 * 60 
+sql <- sprintf("SELECT * FROM \"%s\" LIMIT %i OFFSET %i", layer, n, info$count - n)
+
+
+dat <- vapour::vapour_read_fields(aadcgeoserver, 
+                                  sql = sql)
+track <- cbind(dat$longitude, dat$latitude)
+
+track <- terra::project(as.matrix(track), to = terra::crs(r), from = "OGC:CRS84")
+lines(track, col = "hotpink")
+pt <- tail(track[!is.na(track[,1]) & !is.na(track[,2]), ], 1L)
+points(pt, pch = "+", col = "hotpink")
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
-
-``` r
-
-#aadcgeoserver <- "WFS:https://data.aad.gov.au/geoserver/ows?service=wfs&version=2.0.0&request=GetCapabilities"
-#info <- vapour::vapour_layer_info(aadcgeoserver, "underway:underway")
-
-#dat <- vapour::vapour_read_fields(aadcgeoserver, skip_n = info$count  - 24 * 60 * 5,
-#                                  sql = "SELECT date_time_utc FROM \"underway:underway\"")
-#geom <- vapour::vapour_read_geometry(aadcgeoserver, skip_n = info$count  - 24 * 60 * 5,
-                                  #sql = "SELECT date_time_utc FROM \"underway:underway\"")
-#track <- wk::wk_coords(wk::wkb(geom))[, c("x", "y")]
-
-#track <- terra::project(as.matrix(track), to = terra::crs(r), from = "OGC:CRS84")
-#lines(track, col = "hotpink")
-#pt <- tail(track[!is.na(track[,1]) & !is.na(track[,2]), ], 1L)
-#points(pt, pch = "+", col = "hotpink")
-```
 
 This is 25km sea ice concentration from NSIDC, reprojected from images
 published by NOAA at <https://noaadata.apps.nsidc.org/NOAA/G02135/> (the

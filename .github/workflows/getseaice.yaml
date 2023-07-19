@@ -32,7 +32,7 @@ jobs:
         run: Rscript -e 'install.packages(c("pak"))'
 
       - name: Install packages
-        run: Rscript -e 'pak::pak(c("vapour", "terra", "here", "rmarkdown", "wk", "maps"))'
+        run: Rscript -e 'pak::pak(c("vapour", "terra", "here", "rmarkdown",  "maps"))'
 
       - name: Get data
         run: Rscript -e 'source(here::here("data-raw", "DATASET.R"), echo = TRUE)'
