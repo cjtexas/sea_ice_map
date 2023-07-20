@@ -17,7 +17,7 @@ if (!diff(as.integer(dates)) == 0) stop("different dates!!")
 
 ## date from file vs last date
 if (!dates[1] > as.Date(readLines("data-raw/latestdate.txt", n = 1L))) {
-  #stop("no new data")
+  stop("no new data")
 }
 
 writeLines(format(dates[1]), "data-raw/latestdate.txt")
