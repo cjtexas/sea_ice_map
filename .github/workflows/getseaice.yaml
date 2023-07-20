@@ -24,11 +24,10 @@ jobs:
           use-public-rspm: true
 
       - name: Install package here
-        run: Rscript -e 'install.packages(c("pak"))'
+        run: Rscript -e 'install.packages(c("here"))'
 
       - name: Get data
         run: Rscript -e 'source(here::here("data-raw", "scan.R"), echo = TRUE)'
-
   refresh-data:
     needs: scan-task
     runs-on: macOS-latest
