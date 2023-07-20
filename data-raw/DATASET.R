@@ -16,9 +16,10 @@ dates <- as.Date(c(strptime(basename(north), "N_%Y%m%d"),
 if (!diff(as.integer(dates)) == 0) stop("different dates!!")
 
 ## date from file vs last date
-if (!dates[1] > as.Date(readLines("data-raw/latestdate.txt", n = 1L)))) {
+if (!dates[1] > as.Date(readLines("data-raw/latestdate.txt", n = 1L))) {
   #stop("no new data")
 }
+
 writeLines(format(dates[1]), "data-raw/latestdate.txt")
 library(vapour)
 #tm_ex <- c(-.5, .5, -1, 1) * 20025000
@@ -32,5 +33,12 @@ im <- gdal_raster_dsn(file.path("/vsicurl", c(north, south)),
                       target_res = 25000, target_crs = "+proj=tmerc +lon_0=147", target_ext = tm_ex,
                       out_dsn = "data-raw/seaice.tif")
 
-
-system(sprintf("gdal_translate data-raw/seaice.tif data-raw/seaice.png -of PNG -expand RGB"))
+r <- terra::rast(im[[1L]])
+## hella slow
+##r <- terra::colorize(r, "rgb")
+## so we don't need gdal-bin
+ct <- terra::coltab(r)[[1L]]
+nms <- c("red", "green", "blue", "alpha")
+r <- setNames(terra::rast(r, vals = ct[terra::values(r) + 1,-1], nlyrs = ncol(ct)-1), nms)
+terra::writeRaster(r, "data-raw/seaice.png")
+#system(sprintf("gdal_translate data-raw/seaice.tif data-raw/seaice.png -of PNG -expand RGB"))
