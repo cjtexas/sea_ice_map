@@ -23,7 +23,7 @@ jobs:
           use-public-rspm: true
 
       - name: Install package for scan
-        run: Rscript -e 'install.packages(c("here", "stringr"))'
+        run: Rscript -e 'install.packages(c("here", "stringr"), repos = "https://cloud.r-project.org/")'
 
       - name: Get data
         run: Rscript -e 'source(here::here("data-raw", "scan.R"), echo = TRUE)'
@@ -41,10 +41,10 @@ jobs:
         run: brew install xquartz --cask
 
       - name: Install packages
-        run: Rscript -e 'install.packages(c("pak"))'
+        run: Rscript -e 'install.packages(c("pak"), repos = "https://cloud.r-project.org/")'
 
       - name: Install packages
-        run: Rscript -e 'pak::pak(c("vapour", "terra", "here", "rmarkdown",  "maps"))'
+        run: Rscript -e 'pak::pak(c("vapour", "terra", "here", "rmarkdown",  "maps", "hypertidy/dsn"))'
 
       - name: Get data
         run: Rscript -e 'source(here::here("data-raw", "DATASET.R"), echo = TRUE)'
