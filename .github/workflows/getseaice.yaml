@@ -38,7 +38,7 @@ jobs:
 
       - name: Install XQuartz on macOS
         if: runner.os == 'macOS'
-        run: brew install xquartz --cask
+        run: brew install xquartz gdal --cask
 
       - name: Install packages
         run: Rscript -e 'install.packages(c("pak"), repos = "https://cloud.r-project.org/")'
