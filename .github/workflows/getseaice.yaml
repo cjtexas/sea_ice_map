@@ -47,10 +47,10 @@ jobs:
         run: Rscript -e 'pak::pak(c("vapour", "terra", "here", "rmarkdown",  "maps", "hypertidy/dsn"))'
 
       - name: Get data
-        run: Rscript -e 'source(here::here("data-raw", "DATASET.R"), echo = TRUE)'
+        run: Rscript -e 'source("data-raw/get-data.R", echo = TRUE)'
 
       - name: Render README
-        run: Rscript -e 'rmarkdown::render(here::here("README.Rmd"))'
+        run: Rscript -e 'rmarkdown::render("README.Rmd")'
 
       - name: Commit
         run: |
