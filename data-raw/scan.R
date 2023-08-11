@@ -16,6 +16,8 @@ dates <- as.Date(c(strptime(basename(north), "N_%Y%m%d"),
 if (!diff(as.integer(dates)) == 0) stop("different dates!!")
 
 ## date from file vs last date
+if (file.exists("data-raw/latestdate.txt")) {
 if (!dates[1] > as.Date(readLines("data-raw/latestdate.txt", n = 1L))) {
   stop("no new data")
+}
 }
