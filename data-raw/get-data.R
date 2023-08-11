@@ -15,13 +15,14 @@ dates <- as.Date(c(strptime(basename(north), "N_%Y%m%d"),
            strptime(basename(south), "S_%Y%m%d")))
 if (!diff(as.integer(dates)) == 0) stop("different dates!!")
 
+runupdate <- TRUE
 ## date from file vs last date
 if (file.exists("data-raw/latestdate.txt")) {
  if (!dates[1] > as.Date(readLines("data-raw/latestdate.txt", n = 1L))) {
-  stop("no new data")
+  runupdate <- FALSE
  }
 }
-
+if (runupdate) {
 writeLines(format(dates[1]), "data-raw/latestdate.txt")
 library(vapour)
 #tm_ex <- c(-.5, .5, -1, 1) * 20025000
@@ -44,3 +45,4 @@ nms <- c("red", "green", "blue", "alpha")
 r <- setNames(terra::rast(r, vals = ct[terra::values(r) + 1,-1], nlyrs = ncol(ct)-1), nms)
 terra::writeRaster(r, "data-raw/seaice.png")
 #system(sprintf("gdal_translate data-raw/seaice.tif data-raw/seaice.png -of PNG -expand RGB"))
+}
