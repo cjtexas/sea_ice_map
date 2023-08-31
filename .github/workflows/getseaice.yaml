@@ -27,8 +27,8 @@ jobs:
       - name: Install package for scan
         run: Rscript -e 'install.packages(c("here", "stringr"), repos = "https://cloud.r-project.org/")'
 
-      - name: Scan
-        run: Rscript -e 'source(here::here("data-raw", "scan.R"), echo = TRUE)'
+      #- name: Scan
+      #  run: Rscript -e 'source(here::here("data-raw", "scan.R"), echo = TRUE)'
 
       - uses: r-lib/actions/setup-pandoc@v2
 
